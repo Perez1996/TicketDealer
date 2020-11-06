@@ -57,51 +57,51 @@ public class CargadorTest {
      * Test of validarAdmin method, of class Cargador.
      */
     @Test
-    public void testValidarAdminA1() throws Exception 
+    public void test_ValidarAdmin() throws Exception 
     {
-        System.out.println("validarAdmin");
         String usua = "pepito";
         String pass = "1234";
         Cargador cargador = new Cargador();
         assertEquals(true, cargador.validarAdmin(usua, pass));
-        //fail("The test case is a prototype.");
+        System.out.println("ValidarAdmin : OK");
     }
-    
-    
+    @Test
+    public void test_ValidarEmpleado() throws Exception 
+    {
+        String usua = "PerezEs";
+        String pass = "1234";
+        Cargador cargador = new Cargador();
+        assertEquals(true, cargador.validarEmpleado(usua, pass));
+        System.out.println("ValidarAdmin : OK");
+    }
+
+    @Test
     public void test_getStockProducto() throws SQLException {
        int cantidadEsperada =6 ;
        Cargador cargador = new Cargador();
        assertEquals(cantidadEsperada, cargador.getStockProducto(12) );
+       System.out.println("getStockProducto : OK");
     }
-    
+    @Test
     public void test_agregarStock() throws SQLException {
        Cargador cargador = new Cargador();
        int cantidadEsperada = 9 ;
-               System.out.println(cantidadEsperada);
        int cantidadAgregada = 3;
-               System.out.println(cantidadAgregada);
        int cantidadActual = cargador.getStockProducto(12);
-               System.out.println(cantidadActual);
        cargador.agregarStock(12,cantidadAgregada);
        assertEquals(cantidadEsperada , cantidadActual + cantidadAgregada);
        cargador.quitarStock(12, cantidadAgregada);
-                      System.out.println("agregarStock : OK");
-
+       System.out.println("agregarStock : OK");
     }
-     
-}
-      /* public int getStockProducto(int idProd) throws SQLException {
-    	
-        
-        
-        //agregar
-              cs= cn.getConnection().prepareCall("{call SumaStock(?,?)}");
-        System.out.println(".."+idprod+"----"+cant);
-        cs.setInt("p_ProdId", idprod);
-        cs.setInt("Cantidad", cant);
-        cs.executeUpdate();
-        System.out.println("se agrego");
+    @Test
+    public void test_quitarStock() throws SQLException {
+       Cargador cargador = new Cargador();
+       int cantidadEsperada = 3 ;
+       int cantidadQuitada = 3;
+       int cantidadActual = cargador.getStockProducto(12);
+       cargador.quitarStock(12,cantidadQuitada);
+       assertEquals(cantidadEsperada , cantidadActual - cantidadQuitada);
+       cargador.agregarStock(12, cantidadQuitada);
+       System.out.println("quitarStock : OK");
     }
-    
 }
-/*/
