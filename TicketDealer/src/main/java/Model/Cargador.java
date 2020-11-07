@@ -58,14 +58,15 @@ public class Cargador implements ModelSubject{
 		return false;
 	}
 	
-	public void cargarAdmin(String user, String pass) throws SQLException{
+	public boolean cargarAdmin(String user, String pass) throws SQLException{
 		cs=cn.getConnection().prepareCall("call crearAdmin(?,?)");
 		cs.setString(1, user);
 		cs.setString(2, pass);
 		cs.executeUpdate();
+                return true;
 	}
 	
-    public void quitarStock (int idprod,int cant) throws SQLException{
+        public void quitarStock (int idprod,int cant) throws SQLException{
         cs= cn.getConnection().prepareCall("{call RestaStock(?,?)}");
         cs.setInt("p_ProdId", idprod);
         cs.setInt("Cantidad", cant);
@@ -74,7 +75,7 @@ public class Cargador implements ModelSubject{
         this.notifyObserver();
         }
     
-    public void agregarStock(int idprod,int cant) throws SQLException{
+        public void agregarStock(int idprod,int cant) throws SQLException{
         cs= cn.getConnection().prepareCall("{call SumaStock(?,?)}");
         System.out.println(".."+idprod+"----"+cant);
         cs.setInt("p_ProdId", idprod);
@@ -84,23 +85,23 @@ public class Cargador implements ModelSubject{
         this.notifyObserver();
         }
         
-	public void creaUser (String user,String pass, String tipo) throws SQLException{
+	public boolean creaUser (String user,String pass, String tipo) throws SQLException{
         cs = cn.getConnection().prepareCall("{call CreaUsuario(?,?,?)}");
         cs.setString("username", user);
         cs.setString("pass", pass);
         cs.setString("tipouser", tipo);
         cs.executeUpdate();
-        System.out.println("c creo");
+        return true;
         }
 	
-    public void borraUser (String user) throws SQLException{
+        public boolean borraUser (String user) throws SQLException{
         cs = cn.getConnection().prepareCall("{call BorraUsuario(?)}");
         cs.setString("username", user);
         cs.executeUpdate();
-        System.out.println("c borro");  
+        return true;
         }
     
-    public int getStockProducto(int idProd) throws SQLException {
+        public int getStockProducto(int idProd) throws SQLException {
     	ps = cn.getConnection().prepareStatement("select ProdCant from productos where ProdId=?");
     	ps.setInt(1,idProd);
     	rs = ps.executeQuery();
@@ -111,7 +112,7 @@ public class Cargador implements ModelSubject{
     	return id;
     }
     
-    public int getIdPorNombre(String nombreProd) throws SQLException {
+        public int getIdPorNombre(String nombreProd) throws SQLException {
     	ps = cn.getConnection().prepareStatement("select ProdId from productos where ProdNom = ?");
     	ps.setString(1,  nombreProd);
     	rs = ps.executeQuery();
@@ -122,7 +123,7 @@ public class Cargador implements ModelSubject{
     	return id;
     }
     
-    public void creaProducto (String prodnom,double prodprecio,String prodtipo, String prodcoment) throws SQLException{
+    public boolean creaProducto (String prodnom,double prodprecio,String prodtipo, String prodcoment) throws SQLException{
         cs = cn.getConnection().prepareCall("{call CreaProducto(?,?,?,?)}");
         cs.setString("prodnom", prodnom);
         cs.setDouble("prodprecio", prodprecio);
@@ -131,6 +132,7 @@ public class Cargador implements ModelSubject{
         cs.executeUpdate();
         //System.out.println("c creo");
         this.notifyObserver();
+        return true;
         }
     
     public void borraProducto (int idProd) throws SQLException{
@@ -150,7 +152,6 @@ public class Cargador implements ModelSubject{
         return 0;        
     }
     
-        
     public int getCantidad(int idProd) throws SQLException {
     	ps = cn.getConnection().prepareStatement("select ProdCant from productos where ProdId=? limit 1");
     	ps.setInt(1, idProd);
@@ -238,7 +239,7 @@ public class Cargador implements ModelSubject{
    
    public int getIdEvento(String nomEvento)throws SQLException{
 	   int id=0;
-	   ps=cn.getConnection().prepareStatement("select idevento from evento where nombre= ?");
+	   ps=cn.getConnection().prepareStatement("select idevento from eventos where nombre= ?");
 	   ps.setString(1, nomEvento);
 	   rs=ps.executeQuery();
 	   while(rs.next()){
@@ -260,12 +261,18 @@ public class Cargador implements ModelSubject{
        cs.setInt("p_numentrada",numentrada);
        cs.executeUpdate();
    }
+   public void setDescupado(int idevento,int numentrada) throws SQLException{
+       cs = cn.getConnection().prepareCall("call setDesocupado(?,?)");
+       cs.setInt("p_idevento",idevento);
+       cs.setInt("p_numentrada",numentrada);
+       cs.executeUpdate();
+   }
       
-   public ResultSet CargarStock() throws SQLException{
+        public ResultSet CargarStock() throws SQLException{
 		s = cn.getConnection().createStatement();
 		rs = s.executeQuery("select * from productos");
 		return rs;
-   }
+        }
 
 	public ResultSet CargarCompra(String codigoCompra) throws SQLException {
 		ps = cn.getConnection().prepareStatement("select * from compra where codigocompra = ?") ;
@@ -295,11 +302,12 @@ public class Cargador implements ModelSubject{
 		return rs;
 	}
 	
-	public void imprimirUsers() throws SQLException{
+	public boolean imprimirUsers() throws SQLException{
 		ResultSet users=getUsuarios();
 		while(users.next()){
 			System.out.println("user:"+users.getString(2)+" || pass: "+users.getString(3));
-       }
+                }
+                return true;
 	}
 	
    public void comprarEntrada(int p_idevento,String p_codCompra,int p_numentrada) throws SQLException{
@@ -450,5 +458,5 @@ public class Cargador implements ModelSubject{
            rs=ps.executeQuery();
            return rs;
     }
-    
+   
 }
