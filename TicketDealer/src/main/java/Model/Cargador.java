@@ -26,14 +26,12 @@ public class Cargador implements ModelSubject{
     Statement s ;
     ArrayList<Compra> compraEmpleado;
     ArrayList<Compra> compraCliente;
-    CargaBox cb;
     
 	public Cargador() throws SQLException{
 		observers= new ArrayList<ViewObserver>();
 		compraEmpleado=new ArrayList<Compra>();
 		compraCliente=new ArrayList<Compra>();
         cn = new Connect();
-        cb= new CargaBox();           
 	}
 	
 	public boolean validarAdmin(String usua, String pass) throws SQLException{ 
@@ -200,9 +198,7 @@ public class Cargador implements ModelSubject{
         return 0;
     }
     
-    public CargaBox getCargaBox(){
-    	return cb;
-    }
+  
         
     @Override
 	public void registerObserver(ViewObserver o) {
@@ -458,5 +454,7 @@ public class Cargador implements ModelSubject{
            rs=ps.executeQuery();
            return rs;
     }
-   
+    
+    
+    
 }

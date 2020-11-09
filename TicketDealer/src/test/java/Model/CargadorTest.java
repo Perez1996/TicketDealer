@@ -136,15 +136,7 @@ public class CargadorTest {
     public void test_getPrecio() throws SQLException{
         assertEquals(666, cargador.getPrecio(24));
     }
-   /* @Test
-    public void test_getIdRs() throws SQLException{
-        CargaBox cargabox = new CargaBox();
-        boolean test = false;
-        if(cargador.getIdRs(cargabox.CargarStock(), "PRODTEST")!=0)
-            test = true;
-        else;
-        assertTrue(test);
-    }*/
+   
     @Test
     public void test_getEventos() throws SQLException{
         boolean test = false;
@@ -193,6 +185,15 @@ public class CargadorTest {
         assertTrue(cargador.validarAdmin("TEST", "1234TEST"));
         cargador.renovarClave(6, "TEST");
     }
+     /* @Test
+    public void test_getIdRs() throws SQLException{
+        CargaBox cargabox = new CargaBox();
+        boolean test = false;
+        if(cargador.getIdRs(cargabox.CargarStock(), "PRODTEST")!=0)
+            test = true;
+        else;
+        assertTrue(test);
+    }*/
     /*@Test
     public void test_cargarStock() throws SQLException{
 

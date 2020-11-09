@@ -304,7 +304,7 @@ public class CompraView extends javax.swing.JFrame{
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//OK!
     	carrito=true;        	
     	try {
-            ResultSet Stock = controller.getModel().getCargaBox().CargarStock();
+            ResultSet Stock = controller.getModel().CargarStock();
             int id = controller.getModel().getIdRs(Stock, jComboBox1.getSelectedItem().toString());
             double precio = controller.getModel().getPrecio(id);
             int cantidad = Integer.parseInt(jComboBox2.getSelectedItem().toString());
@@ -362,7 +362,7 @@ public class CompraView extends javax.swing.JFrame{
     private void setBoxStock() throws SQLException {//OK!
         jComboBox1.removeAllItems();
         jComboBox2.removeAllItems();
-        ResultSet Stock = controller.getModel().getCargaBox().CargarStock();
+        ResultSet Stock = controller.getModel().CargarStock();
         while (Stock.next()) {
             jComboBox1.addItem(Stock.getString(2));
         }

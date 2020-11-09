@@ -246,7 +246,7 @@ public class ControllerEmp implements ControllerInterface{
 	@Override
 	public ResultSet getRSStock() {
 		try {
-			return model.getCargaBox().CargarStock();
+			return model.CargarStock();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
