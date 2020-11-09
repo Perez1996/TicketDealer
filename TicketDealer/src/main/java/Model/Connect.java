@@ -9,9 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Connect {
-    String url = "jdbc:mysql://localhost:3306/TicketDealer?useLegacyDatetimeCode=false&serverTimezone=UTC";
-    String user = "TicketDealer";
-    String pass = "1101";
+    String url = "jdbc:mysql://uab1hyqinrvajxk0:054VN7orHN5TArwfoY0Z@buhzdu9tgyjhnapz0lv6-mysql.services.clever-cloud.com:3306/buhzdu9tgyjhnapz0lv6";
+    String user = "uab1hyqinrvajxk0";
+    String pass = "054VN7orHN5TArwfoY0Z";
     ResultSet rs ;
     Statement s ;
     Connection cnx;
