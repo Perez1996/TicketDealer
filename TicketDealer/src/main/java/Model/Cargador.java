@@ -365,14 +365,14 @@ public class Cargador implements ModelSubject{
 	}
         
     public ResultSet getCompraFinalizada(String codCompra) throws SQLException{
-        ps = cn.getConnection().prepareStatement("select * from comprasfinalizadas where codigoCompra = ?");
+        ps = cn.getConnection().prepareStatement("select * from finalizadas where codigoCompra = ?");
         ps.setString(1,codCompra);
         rs = ps.executeQuery();
         return rs;
     }
     
     public String getDescVenta(String codCompra) throws SQLException{
-		ps = cn.getConnection().prepareStatement("select descProd from compra where idcompra = ?");
+		ps = cn.getConnection().prepareStatement("select descProd from compra where codigoCompra = ?");
         ps.setString(1,codCompra);
         rs = ps.executeQuery();
         String text="";
@@ -405,7 +405,7 @@ public class Cargador implements ModelSubject{
     
     public Date getFechaCompra(String codCompra)throws SQLException{
     	Date fec=null;
-    	ps = cn.getConnection().prepareStatement("select fecha from comprasfinalizadas where idcompra = ?");
+    	ps = cn.getConnection().prepareStatement("select fecha from finalizadas where idcompra = ?");
     	ps.setString(1, codCompra);
     	rs = ps.executeQuery();
     	while(rs.next()){
@@ -425,7 +425,7 @@ public class Cargador implements ModelSubject{
     
     public ResultSet getTablaObserver() throws SQLException{
         s = cn.getConnection().createStatement();
-        rs = s.executeQuery("select codigoCompra,formaPago,horaVenta,montoVenta from comprasfinalizadas where empleado = 1");
+        rs = s.executeQuery("select * from finalizadas where empleado = 1");
         return rs;
     }
         
@@ -454,6 +454,7 @@ public class Cargador implements ModelSubject{
            rs=ps.executeQuery();
            return rs;
     }
+    
     
     
     

@@ -110,7 +110,7 @@ public class CargadorTest {
         int id = cargador.getIdProd() - 1;
         cargador.borraProducto(id);
     }
-   /* @Test
+    @Test
     public void test_creaAdmin() throws SQLException{
         assertEquals(true, cargador.cargarAdmin("TESTING", "TESTING"));
         cargador.borraUser("TESTING");
@@ -119,7 +119,7 @@ public class CargadorTest {
     public void test_creaUser() throws SQLException{
         assertEquals(true, cargador.creaUser("TESTING", "TESTING", "e"));
         cargador.borraUser("TESTING");
-    }*/
+    }
     @Test
     public void test_getStockProd() throws SQLException{
         assertEquals(666, cargador.getStockProducto(24));
@@ -174,36 +174,38 @@ public class CargadorTest {
     }
     @Test
      public void test_getIdUsuario() throws SQLException{
-
-        assertEquals(6, cargador.getIdUsuario("TEST", "TEST"));
+         boolean test = false; 
+         int id = cargador.getIdUsuario("admin", "admin");
+         if (id == 1)
+             test=true;
+                     else;
+         assertTrue(test);
     }
     @Test
      public void test_RenovarClave() throws SQLException{
-
+        int id = cargador.getIdUsuario("admin", "admin");
         String nuevaClave = "1234TEST";
-        cargador.renovarClave(6, nuevaClave);
-        assertTrue(cargador.validarAdmin("TEST", "1234TEST"));
-        cargador.renovarClave(6, "TEST");
+        cargador.renovarClave(id, nuevaClave);
+        assertTrue(cargador.validarAdmin("admin", nuevaClave));
+        cargador.renovarClave(id, "admin");
     }
-     /* @Test
+     @Test
     public void test_getIdRs() throws SQLException{
-        CargaBox cargabox = new CargaBox();
         boolean test = false;
-        if(cargador.getIdRs(cargabox.CargarStock(), "PRODTEST")!=0)
+        if(cargador.getIdRs(cargador.CargarStock(), "PRODTEST")!=0)
             test = true;
         else;
         assertTrue(test);
-    }*/
-    /*@Test
+    }
+    @Test
     public void test_cargarStock() throws SQLException{
 
-        CargaBox cargabox = new CargaBox();
         boolean test = false;
         if(cargador.CargarStock()!=null)
             test = true;
         else;
         assertTrue(test);
-    }*/
+    }
    @Test
     public void test_cargarCompra() throws SQLException{
 
@@ -220,7 +222,6 @@ public class CargadorTest {
     }
     @Test
     public void test_getIdAsiento() throws SQLException{
-
         assertEquals(0,cargador.getIdAsiento("A", 0));
     }
     @Test
@@ -233,12 +234,53 @@ public class CargadorTest {
         assertTrue(test);
     }
     @Test
-    public void test_LoginObj() throws SQLException{
+    public void test_LoginObj() {
         login log = new login("test","test","e");
         boolean test = false;
         if(log.getPass().equals("test") && log.getUser().equals("test") && log.getTipo().equals("e"))
             test = true;
         else;
         assertTrue(test);
+    }
+    @Test 
+    public void test_ProductoObj(){
+        Producto producto = new Producto("Caramelos",4,"golosinas","test");
+        boolean test = false;
+        if(producto.getProdComent().equals("test")&&producto.getProdNom().equals("Caramelos")&&producto.getProdPrecio()==4&&producto.getProdTipo().equals("golosinas"))
+        test = true;
+        else;
+        assertTrue(test);        
+    }
+    @Test
+    public void test_getCarrito() throws SQLException{
+        String codCompra = "test1234"; 
+        boolean test = false;
+        if(cargador.getCarrito(codCompra)!=null)
+            test = true;
+        else;
+        assertTrue(test);
+    }
+    @Test
+    public void test_getTablaObserver() throws SQLException{
+        boolean test = false;
+        if(cargador.getTablaObserver()!=null)
+            test = true;
+        else;
+        assertTrue(test);
+    }
+    @Test
+    public void test_getprecioFinal() throws SQLException{
+        String codCompra = "test1234"; 
+        boolean test = false;
+        if(cargador.getPrecioFinal(codCompra)==8000)
+            test = true;
+        else;
+        assertTrue(test);
+    }
+    @Test
+    public void test_getDescVenta() throws SQLException{
+        String codCompra = "test1234"; 
+        assertEquals("metallica",cargador.getDescVenta(codCompra));
+           
     }
 }
