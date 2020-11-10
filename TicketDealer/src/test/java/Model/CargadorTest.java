@@ -220,10 +220,50 @@ public class CargadorTest {
 
         assertTrue(cargador.imprimirUsers());
     }
+    //---
     @Test
-    public void test_getIdAsiento() throws SQLException{
+    public void test_getIdAsiento1() throws SQLException{
         assertEquals(0,cargador.getIdAsiento("A", 0));
     }
+     @Test
+    public void test_getIdAsiento2() throws SQLException{
+        assertEquals(8,cargador.getIdAsiento("B", 0));
+    }
+     @Test
+    public void test_getIdAsiento3() throws SQLException{
+        assertEquals(16,cargador.getIdAsiento("C", 0));
+    }
+     @Test
+    public void test_getIdAsiento4() throws SQLException{
+        assertEquals(24,cargador.getIdAsiento("D", 0));
+    }
+     @Test
+    public void test_getIdAsiento5() throws SQLException{
+        assertEquals(32,cargador.getIdAsiento("E", 0));
+    }
+     @Test
+    public void test_getIdAsiento6() throws SQLException{
+        assertEquals(40,cargador.getIdAsiento("F", 0));
+    }
+     @Test
+    public void test_getIdAsiento7() throws SQLException{
+        assertEquals(48,cargador.getIdAsiento("G", 0));
+    }
+     @Test
+    public void test_getIdAsiento8() throws SQLException{
+        assertEquals(56,cargador.getIdAsiento("H", 0));
+    }
+     @Test
+    public void test_getIdAsiento9() throws SQLException{
+        assertEquals(64,cargador.getIdAsiento("I", 0));
+    }
+     @Test
+    public void test_getIdAsiento10() throws SQLException{
+        assertEquals(72,cargador.getIdAsiento("J", 0));
+    }
+    
+    
+    //-------
     @Test
     public void test_conexionDB()throws SQLException{
         
