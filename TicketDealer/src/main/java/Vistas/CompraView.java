@@ -273,7 +273,7 @@ public class CompraView extends javax.swing.JFrame{
 		if(carrito){
 			controller.getCompraActual().empleadoTrue();
 			}
-		controller.getModel().finalizarCompra(controller.getCompraActual().getCodigo());
+                //controller.getModel().finalizarCompra("test1234","not implemented",666);
 		controller.cambiarAFormaPago(this);
 	}
 

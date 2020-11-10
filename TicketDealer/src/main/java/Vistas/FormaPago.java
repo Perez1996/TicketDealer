@@ -118,7 +118,7 @@ public class FormaPago extends javax.swing.JFrame{
         controller.getCompraActual().definirFormaPago(1);
         try {
             controller.getCompraActual().setTotal(controller.getCompraActual().obtenerObjFormaPago().pagar(controller.getModel().getPrecioFinal(controller.getCompraActual().getCodigo())));
-        	controller.getModel().setEmpleado(1,"Efectivo", controller.getCompraActual().getCodigo());
+        	controller.getModel().asociarEmpleado(1,"Efectivo", controller.getCompraActual().getCodigo());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

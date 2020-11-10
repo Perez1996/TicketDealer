@@ -69,17 +69,14 @@ public class Cargador implements ModelSubject{
         cs.setInt("p_ProdId", idprod);
         cs.setInt("Cantidad", cant);
         cs.executeUpdate();
-        System.out.println("c quito");
         this.notifyObserver();
         }
     
         public void agregarStock(int idprod,int cant) throws SQLException{
         cs= cn.getConnection().prepareCall("{call SumaStock(?,?)}");
-        System.out.println(".."+idprod+"----"+cant);
         cs.setInt("p_ProdId", idprod);
         cs.setInt("Cantidad", cant);
         cs.executeUpdate();
-        System.out.println("c agrego");
         this.notifyObserver();
         }
         
@@ -128,7 +125,6 @@ public class Cargador implements ModelSubject{
         cs.setString("prodtipo", prodtipo);
         cs.setString("prodcoment", prodcoment);
         cs.executeUpdate();
-        //System.out.println("c creo");
         this.notifyObserver();
         return true;
         }
@@ -137,7 +133,6 @@ public class Cargador implements ModelSubject{
         cs = cn.getConnection().prepareCall("{call BorraProducto(?)}");
         cs.setInt("p_idprod", idProd);
         cs.executeUpdate();
-        //System.out.println("c borro");
         this.notifyObserver();
     }
         
@@ -163,15 +158,30 @@ public class Cargador implements ModelSubject{
              
     public void agregaItem(int idProd,String descProd,int cantidad,double prodPrecio,double precFinal, String codigoCompra) throws SQLException{
         cs = cn.getConnection().prepareCall("{call agregaItem(?,?,?,?,?,?)}");
-        cs.setInt("idProd", idProd);
-        cs.setString("descProd", descProd);
-        cs.setInt("cantidad", cantidad);
-        cs.setDouble("prodPrecio", prodPrecio);
-        cs.setDouble("precFinal", precFinal);
-        cs.setString("codigoCompra", codigoCompra);
+        cs.setString(1, descProd);
+        cs.setInt(2, cantidad);
+        cs.setDouble(3, prodPrecio);
+        cs.setDouble(4, precFinal);
+        cs.setString(5, codigoCompra);
+        cs.setInt(6, idProd);
+        
         cs.executeUpdate();
     }
-        
+   
+    public void quitarItem(int idcompra) throws SQLException{
+       cs = cn.getConnection().prepareCall("call borrarItem(?)");
+       cs.setInt(1,idcompra);
+       cs.executeUpdate();
+    }
+    
+    
+   
+    
+    
+    
+    
+    
+    
     public ResultSet obtenerCompra(String codigoCompra) throws SQLException{
         ps = cn.getConnection().prepareStatement("select * from compra where codigocompra = ?");
         ps.setString(1, codigoCompra);
@@ -221,15 +231,16 @@ public class Cargador implements ModelSubject{
 		}
 	}
 		
-	public ResultSet getAsientos(int idEvento) throws SQLException{
-		s = cn.getConnection().createStatement();
-        rs = s.executeQuery("select * from eventos where ocupado = 0 and id = idevento");
-        return rs;
+	public ResultSet getAsientosLibres(int idEvento) throws SQLException{
+        ps = cn.getConnection().prepareStatement("select * from eventos where ocupado = 0 and idevento = ?");
+        ps.setInt(idEvento, idEvento);
+        return ps.executeQuery();
    }
 	
    public ResultSet getEventos() throws SQLException{//OK!
        s = cn.getConnection().createStatement();
        rs = s.executeQuery("select idevento,nombre,ubicacion,numentrada,precio from eventos");
+       
        return rs;
    }
    
@@ -245,8 +256,8 @@ public class Cargador implements ModelSubject{
    }
       
    public ResultSet getRecibo(String codCompra) throws SQLException{
-       ps = cn.getConnection().prepareStatement("select * from compra where codcompra = ?");
-       ps.setString(0,codCompra);
+       ps = cn.getConnection().prepareStatement("select * from compra where codigocompra = ?");
+       ps.setString(1, codCompra);
        rs = ps.executeQuery();
        return rs;
    }
@@ -298,21 +309,28 @@ public class Cargador implements ModelSubject{
 		return rs;
 	}
 	
-	public boolean imprimirUsers() throws SQLException{
-		ResultSet users=getUsuarios();
-		while(users.next()){
-			System.out.println("user:"+users.getString(2)+" || pass: "+users.getString(3));
-                }
-                return true;
-	}
+	
 	
    public void comprarEntrada(int p_idevento,String p_codCompra,int p_numentrada) throws SQLException{
        cs = cn.getConnection().prepareCall("call comprarEntrada(?,?,?)");
-       cs.setInt("idEvento", p_idevento);
-       cs.setString("codCompra", p_codCompra);
-       cs.setInt("numentrada", p_numentrada);
+       cs.setInt(1, p_idevento);
+       cs.setString(2, p_codCompra);
+       cs.setInt(3, p_numentrada);
        cs.executeUpdate();
     }
+   public void devolverEntrada() throws SQLException{
+        ps = cn.getConnection().prepareStatement("Delete from compra where idcompra=? ");
+    	ps.setInt(1, ultimaCompra());
+    	ps.executeUpdate();
+    }
+   public int ultimaCompra() throws SQLException{
+        s = cn.getConnection().createStatement();
+        rs = s.executeQuery ("SELECT idcompra FROM compra ORDER BY idcompra DESC limit 1;");          
+        while (rs.next()){
+        	return rs.getInt(1);
+        }
+        return 0; 
+   }
         
     public int getIdAsiento(String Fila, int Columna){
         if(Fila.equalsIgnoreCase("A")) return 0*8+Columna ;
@@ -329,7 +347,6 @@ public class Cargador implements ModelSubject{
     }
         
     public boolean estaOcupado(int p_idevento,int p_numentrada) throws SQLException{
-        //	System.out.println(idPelicula+"---"+idAsiento);
         ps = cn.getConnection().prepareStatement("select ocupado from eventos where idevento = ? and numentrada = ?");
         ps.setInt(1, p_idevento);
         ps.setInt(2, p_numentrada);
@@ -348,21 +365,20 @@ public class Cargador implements ModelSubject{
         //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
         
         
-    public void finalizarCompra(String codCompra) throws SQLException{
+    public void finalizarCompra(String codCompra, String descCompra, Double total) throws SQLException{
         cs = cn.getConnection().prepareCall("call finalizarCompra(?,?,?,?)");
-        cs.setString("codCompra",codCompra);
-        cs.setString("descCompra", this.getDescVenta(codCompra));
-        cs.setDouble("totalPrecio", this.getPrecioFinal(codCompra));
-        cs.setDate("fechasys",(java.sql.Date) getFecha());
+        cs.setString(1,codCompra);
+        cs.setString(2, descCompra);
+        cs.setDouble(3, total);
+        cs.setString(4,getFecha().toString());
         cs.executeUpdate();
     }
-        
-    public ResultSet GenerarRecibo(String codCompra) throws SQLException{
-		ps = cn.getConnection().prepareStatement("select * from recibos where codCompra = ?");
-		ps.setString(1, codCompra);
-		rs= ps.executeQuery();
-		return rs;
-	}
+    public void borrarCompraFinalizada(String codigocompra) throws SQLException {
+        cs = cn.getConnection().prepareCall("Delete from finalizadas where codigocompra = ?");
+    	cs.setString(1, codigocompra);
+    	cs.executeUpdate();
+    }
+    
         
     public ResultSet getCompraFinalizada(String codCompra) throws SQLException{
         ps = cn.getConnection().prepareStatement("select * from finalizadas where codigoCompra = ?");
@@ -372,7 +388,7 @@ public class Cargador implements ModelSubject{
     }
     
     public String getDescVenta(String codCompra) throws SQLException{
-		ps = cn.getConnection().prepareStatement("select descProd from compra where codigoCompra = ?");
+	ps = cn.getConnection().prepareStatement("select descProd from compra where codigoCompra = ?");
         ps.setString(1,codCompra);
         rs = ps.executeQuery();
         String text="";
@@ -403,24 +419,40 @@ public class Cargador implements ModelSubject{
     	return fec;
     }
     
-    public Date getFechaCompra(String codCompra)throws SQLException{
-    	Date fec=null;
+    public String getFechaCompra(String codCompra)throws SQLException{
+    	String fec="";
     	ps = cn.getConnection().prepareStatement("select fecha from finalizadas where idcompra = ?");
     	ps.setString(1, codCompra);
     	rs = ps.executeQuery();
     	while(rs.next()){
-    		fec = rs.getDate(1);
+    		fec = rs.getString(1);
     	}
     	return fec;
 	}
     
-    public void setEmpleado(int empleado,String formaPago,String codCompra) throws SQLException{
-    	cs = cn.getConnection().prepareCall("call setTipoCompra(?,?,?)");
+    public void asociarEmpleado(int empleado,String formaPago,String codCompra) throws SQLException{
+    	cs = cn.getConnection().prepareCall("call asociarEmpleado(?,?,?)");
     	cs.setInt(1, empleado);
     	cs.setString(2, formaPago);
     	cs.setString(3, codCompra);
     	cs.executeUpdate();
-            notifyObserver();
+           this.notifyObserver();
+    }
+    public String getFormaPago(String codCompra) throws SQLException{
+        String formapago="";
+        ps = cn.getConnection().prepareStatement("select formapago from finalizadas where codigocompra = ?");
+    	ps.setString(1, codCompra);
+    	rs = ps.executeQuery();
+    	while(rs.next()){
+    		formapago = rs.getString(1);
+    	}
+    	return formapago; 
+    }
+    public void quitarFormaPago(String codCompra) throws SQLException{
+        cs = cn.getConnection().prepareCall("call quitarFormapago(?)");
+    	cs.setString(1, codCompra);
+    	cs.executeUpdate();
+        
     }
     
     public ResultSet getTablaObserver() throws SQLException{

@@ -22,8 +22,8 @@ public class Connect {
           cnx= DriverManager.getConnection(url, user, pass) ;
 
            
-         } catch (ClassNotFoundException ex) {
-            throw new ClassCastException(ex.getMessage());
+         } catch (Exception e) {
+            
          }
         }
         public Connection getConnection(){
