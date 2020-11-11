@@ -6,8 +6,6 @@
 package Model;
 
 import Resources.Compra;
-import Vistas.ConsultaStock;
-import Vistas.ViewObserver;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
- * @author Scoles
+ * @author Macbook de Esteban
  */
 public class CargadorTest {
     private static Cargador cargador;
@@ -62,7 +60,7 @@ public class CargadorTest {
     {
         String usua = "pepito";
         String pass = "1234";
-        assertEquals(true, cargador.validarAdmin(usua, pass));
+        assertTrue(cargador.validarAdmin(usua, pass));
         System.out.println("test_ValidarAdmin : OK");
     }
     @Test
@@ -71,7 +69,7 @@ public class CargadorTest {
      
         String usua = "PerezEs";
         String pass = "1234";
-        assertEquals(true, cargador.validarEmpleado(usua, pass));
+        assertTrue(cargador.validarEmpleado(usua, pass));
         System.out.println("test_ValidarEmpleado : OK");
     }
 
@@ -458,12 +456,12 @@ public class CargadorTest {
         System.out.println("test_comprarEntrada : OK");
     }
     @Test
-        public void test_getok() throws SQLException{
+        public void test_AgregarItem() throws SQLException{
         String codCompra = "TEST2";
         cargador.agregaItem(0, codCompra, 0, 0, 0, codCompra);
         assertEquals(codCompra,cargador.getDescVenta(codCompra));
         cargador.quitarItem(666);
-        System.out.println("GETOK : OK");
+        System.out.println("test_AgregarItem : OK");
         
     }
     

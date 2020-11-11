@@ -1,6 +1,5 @@
 package Model;
 import Vistas.*;
-import Controlador.*;
 import Resources.*;
 
 import java.sql.CallableStatement;
@@ -12,7 +11,6 @@ import java.sql.Statement;
 import java.util.Date;
 import java.util.ArrayList;
 
-import java.util.HashMap;
 
 
 

@@ -7,11 +7,10 @@ package Init;
 import  Vistas.*;
 import  Controlador.*;
 import  Model.*;
-import  Resources.*;
 import java.sql.SQLException;
 /**
  *
- * @author macbook
+ * @author Macbook de Esteban
  */
 public class Main {
     

@@ -1,7 +1,5 @@
 package Model;
-import Vistas.*;
-import Controlador.*;
-import Resources.*;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
